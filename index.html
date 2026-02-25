@@ -2,12 +2,17 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
 <title>เงื่อนไขและข้อกำหนด - K2PS</title>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
 :root {
   --navy:#1a3a6b; --navy2:#2952a3; --blue:#2563eb; --blue2:#1d4ed8;
   --orange:#dd6b20; --red:#c0392b; --green:#16a34a;
@@ -15,133 +20,357 @@
   --border:#e2e8f0; --bg:#f0f4f8; --card:#fff;
   --note-bg:#fffbeb; --note-border:#f6c94e; --note-text:#744210;
   --bottom-bg:#f7f8fc; --err:#dc2626;
+
+  /* Fluid font scale — ทำงานทุกขนาดหน้าจอ */
+  --fs-xs:  clamp(10px, 2.5vw, 12px);
+  --fs-sm:  clamp(12px, 3vw,   14px);
+  --fs-md:  clamp(13px, 3.5vw, 15px);
+  --fs-lg:  clamp(15px, 4vw,   18px);
+  --fs-xl:  clamp(17px, 4.5vw, 22px);
 }
+
+html {
+  -webkit-text-size-adjust: 100%; /* ป้องกัน iOS zoom font */
+  text-size-adjust: 100%;
+}
+
 body {
   font-family:"Sarabun",sans-serif;
-  background:var(--bg); color:var(--text1);
-  min-height:100vh; padding:24px 16px 60px;
+  background:var(--bg);
+  color:var(--text1);
+  min-height:100vh;
+  padding:16px 12px 72px;
+  overflow-x:hidden; /* ป้องกัน horizontal scroll */
+  -webkit-font-smoothing:antialiased;
 }
-.wrap { max-width:480px; margin:0 auto; }
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.wrap {
+  max-width:520px;
+  width:100%;
+  margin:0 auto;
+}
 
 /* CARD SECTIONS */
 .sec {
   background:var(--card);
   border-left:1px solid var(--border);
   border-right:1px solid var(--border);
+  overflow:hidden; /* ป้องกัน child element ล้น */
 }
-.sec:first-child { border-top:1px solid var(--border); border-radius:16px 16px 0 0; }
-.sec-last { border-bottom:1px solid var(--border); border-radius:0 0 16px 16px; }
+.sec:first-child {
+  border-top:1px solid var(--border);
+  border-radius:14px 14px 0 0;
+}
+.sec-last {
+  border-bottom:1px solid var(--border);
+  border-radius:0 0 14px 14px;
+}
 .sep { border-top:1px solid var(--border); }
 
-/* HEADER */
-.header { padding:28px 24px 20px; }
-.header h1 { font-size:21px; font-weight:700; color:var(--navy); line-height:1.45; }
-.header h1 em { font-style:normal; color:var(--navy2); }
-.header .sub { font-size:13px; color:var(--muted); margin-top:8px; line-height:1.6; }
-
-/* FORM */
-.form-sec {
-  padding:20px 24px;
-  display:flex; gap:16px;
-  justify-content:space-between; align-items:flex-start;
+/* ============================================================
+   HEADER
+   ============================================================ */
+.header { padding:22px 18px 16px; }
+.header h1 {
+  font-size:var(--fs-xl);
+  font-weight:700;
+  color:var(--navy);
+  line-height:1.45;
+  word-break:keep-all; /* ป้องกันตัดคำแปลก */
+  overflow-wrap:break-word;
 }
-.form-fields { flex:1; display:flex; flex-direction:column; gap:12px; }
+.header h1 em { font-style:normal; color:var(--navy2); }
+.header .sub {
+  font-size:var(--fs-xs);
+  color:var(--muted);
+  margin-top:8px;
+  line-height:1.65;
+}
+
+/* ============================================================
+   FORM SECTION — stack บนจอเล็กมาก (<320px)
+   ============================================================ */
+.form-sec {
+  padding:18px;
+  display:flex;
+  gap:14px;
+  justify-content:space-between;
+  align-items:flex-start;
+  flex-wrap:wrap; /* wrap บนจอเล็กมาก */
+}
+.form-fields {
+  flex:1;
+  min-width:0; /* ป้องกัน flex child overflow */
+  display:flex;
+  flex-direction:column;
+  gap:11px;
+}
+
+/* FIELD GROUP */
 .field-group { display:flex; flex-direction:column; gap:4px; }
-.field-group label { font-size:12px; font-weight:600; color:var(--navy2); }
+.field-group label {
+  font-size:var(--fs-xs);
+  font-weight:600;
+  color:var(--navy2);
+}
 .field-group input {
-  border:1.5px solid var(--border); border-radius:8px;
-  padding:9px 12px; font-family:"Sarabun",sans-serif; font-size:14px;
-  color:var(--text1); background:#fff; outline:none;
+  border:1.5px solid var(--border);
+  border-radius:8px;
+  padding:10px 12px;
+  font-family:"Sarabun",sans-serif;
+  font-size:var(--fs-md); /* ≥13px ป้องกัน iOS auto-zoom เมื่อ focus */
+  color:var(--text1);
+  background:#fff;
+  outline:none;
+  width:100%;
+  min-width:0;
+  -webkit-appearance:none; /* ลบ iOS default style */
+  appearance:none;
   transition:border-color 0.15s, box-shadow 0.15s;
 }
 .field-group input:focus {
   border-color:var(--blue);
-  box-shadow:0 0 0 3px rgba(37,99,235,0.1);
+  box-shadow:0 0 0 3px rgba(37,99,235,0.12);
 }
 .field-group input.err { border-color:var(--err); }
 .field-group input.ok  { border-color:var(--green); }
-.field-group .hint { font-size:11px; color:var(--muted); }
-.field-group .errmsg { font-size:11px; color:var(--err); display:none; }
+.field-group .hint {
+  font-size:var(--fs-xs);
+  color:var(--muted);
+  line-height:1.4;
+}
+.field-group .errmsg {
+  font-size:var(--fs-xs);
+  color:var(--err);
+  display:none;
+  line-height:1.4;
+}
 .field-group input.err ~ .errmsg { display:block; }
-.status-row { font-size:13px; color:var(--text2); margin-top:4px; }
+
+.status-row {
+  font-size:var(--fs-sm);
+  color:var(--text2);
+  margin-top:2px;
+}
 .status-row .badge { color:var(--orange); font-weight:600; }
 
-/* QR */
-.qr-block { flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:6px; }
-#qr-canvas {
-  width:88px; height:88px;
-  border-radius:6px; border:1px solid var(--border);
-  overflow:hidden; background:#fff;
+/* QR BLOCK */
+.qr-block {
+  flex-shrink:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:5px;
 }
-#qr-canvas img    { width:88px !important; height:88px !important; }
-#qr-canvas canvas { width:88px !important; height:88px !important; }
-.qr-label { font-size:11px; color:var(--muted); text-align:center; max-width:88px; line-height:1.4; }
+#qr-canvas {
+  width:82px; height:82px;
+  border-radius:6px;
+  border:1px solid var(--border);
+  overflow:hidden;
+  background:#fff;
+  flex-shrink:0;
+}
+#qr-canvas img    { width:82px !important; height:82px !important; display:block; }
+#qr-canvas canvas { width:82px !important; height:82px !important; display:block; }
+.qr-label {
+  font-size:var(--fs-xs);
+  color:var(--muted);
+  text-align:center;
+  max-width:82px;
+  line-height:1.4;
+  word-break:keep-all;
+}
 
-/* NOTE */
+/* ============================================================
+   NOTE YELLOW
+   ============================================================ */
 .note-yellow {
   background:var(--note-bg);
   border-left:4px solid var(--note-border);
-  padding:13px 18px;
+  padding:12px 16px;
 }
-.note-yellow p { font-size:13px; color:var(--note-text); line-height:1.65; }
+.note-yellow p {
+  font-size:var(--fs-sm);
+  color:var(--note-text);
+  line-height:1.65;
+  overflow-wrap:break-word;
+}
 .note-yellow strong { color:var(--red); font-weight:700; }
 
-/* TERMS */
-.terms-sec { padding:18px 24px; }
-.terms-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
-.terms-header h2 { font-size:16px; font-weight:700; color:var(--navy); }
+/* ============================================================
+   TERMS
+   ============================================================ */
+.terms-sec { padding:16px 18px; }
+.terms-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+.terms-header h2 {
+  font-size:var(--fs-lg);
+  font-weight:700;
+  color:var(--navy);
+}
 .dots { display:flex; gap:3px; padding:4px; }
 .dots span { width:5px; height:5px; background:var(--muted); border-radius:50%; }
+
 .terms-scroll {
-  border:1px solid var(--border); border-radius:8px;
-  max-height:230px; overflow-y:auto; background:#fafbfc;
-  scrollbar-width:thin; scrollbar-color:#cbd5e0 transparent;
+  border:1px solid var(--border);
+  border-radius:8px;
+  max-height:220px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  background:#fafbfc;
+  -webkit-overflow-scrolling:touch; /* smooth scroll iOS */
+  scrollbar-width:thin;
+  scrollbar-color:#cbd5e0 transparent;
 }
-.terms-scroll::-webkit-scrollbar { width:5px; }
-.terms-scroll::-webkit-scrollbar-thumb { background:#cbd5e0; border-radius:3px; }
+.terms-scroll::-webkit-scrollbar { width:4px; }
+.terms-scroll::-webkit-scrollbar-thumb { background:#cbd5e0; border-radius:4px; }
+
 .term-item {
-  font-size:14px; color:var(--text2);
-  padding:10px 16px; border-bottom:1px solid var(--border); line-height:1.55;
+  font-size:var(--fs-sm);
+  color:var(--text2);
+  padding:10px 14px;
+  border-bottom:1px solid var(--border);
+  line-height:1.6;
+  overflow-wrap:break-word;
+  word-break:break-word;
 }
 .term-item:last-child { border-bottom:none; }
 .term-item .n { color:var(--navy2); font-weight:700; margin-right:4px; }
 
-/* CHECKBOX */
-.cb-row { padding:15px 24px; display:flex; align-items:center; gap:10px; }
-.cb-row input { width:18px; height:18px; accent-color:var(--blue); cursor:pointer; flex-shrink:0; }
-.cb-row label { font-size:14px; color:var(--text2); cursor:pointer; line-height:1.4; }
+/* ============================================================
+   CHECKBOX
+   ============================================================ */
+.cb-row {
+  padding:14px 18px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.cb-row input {
+  width:18px; height:18px;
+  accent-color:var(--blue);
+  cursor:pointer;
+  flex-shrink:0;
+  /* ทำให้แตะง่ายบนมือถือ */
+  min-width:18px; min-height:18px;
+}
+.cb-row label {
+  font-size:var(--fs-sm);
+  color:var(--text2);
+  cursor:pointer;
+  line-height:1.5;
+  overflow-wrap:break-word;
+}
 
-/* BUTTON */
-.btn-sec { padding:14px 24px 18px; }
+/* ============================================================
+   BUTTON — touch target ≥ 48px ตาม WCAG
+   ============================================================ */
+.btn-sec { padding:12px 18px 16px; }
 .btn-confirm {
-  width:100%; background:var(--blue); color:#fff; border:none;
-  border-radius:10px; padding:15px;
-  font-family:"Sarabun",sans-serif; font-size:16px; font-weight:600;
-  cursor:not-allowed; opacity:0.45;
+  width:100%;
+  background:var(--blue);
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  padding:15px;
+  min-height:50px; /* touch target */
+  font-family:"Sarabun",sans-serif;
+  font-size:var(--fs-lg);
+  font-weight:600;
+  cursor:not-allowed;
+  opacity:0.45;
   box-shadow:0 4px 14px rgba(37,99,235,0.25);
   transition:background 0.15s, opacity 0.2s, transform 0.1s;
+  -webkit-tap-highlight-color:transparent; /* ลบ highlight iOS */
+  touch-action:manipulation; /* ป้องกัน double-tap zoom */
 }
-.btn-confirm.active          { cursor:pointer; opacity:1; }
-.btn-confirm.active:hover    { background:var(--blue2); transform:translateY(-1px); }
-.btn-confirm.active:active   { transform:translateY(0); }
-.btn-confirm.loading         { cursor:not-allowed; opacity:0.7; }
+.btn-confirm.active        { cursor:pointer; opacity:1; }
+.btn-confirm.active:hover  { background:var(--blue2); }
+.btn-confirm.active:active { transform:scale(0.98); }
+.btn-confirm.loading       { cursor:not-allowed; opacity:0.7; }
 
-/* BOTTOM */
-.bottom-note { background:var(--bottom-bg); padding:14px 20px; }
-.bottom-note p { font-size:12px; color:var(--muted); line-height:1.75; }
+/* ============================================================
+   BOTTOM NOTE
+   ============================================================ */
+.bottom-note { background:var(--bottom-bg); padding:12px 18px; }
+.bottom-note p {
+  font-size:var(--fs-xs);
+  color:var(--muted);
+  line-height:1.75;
+  overflow-wrap:break-word;
+}
 
-/* TOAST */
+/* ============================================================
+   TOAST — ติด safe area บน iPhone มี notch/Dynamic Island
+   ============================================================ */
 .toast {
-  position:fixed; bottom:24px; left:50%;
+  position:fixed;
+  bottom:calc(20px + env(safe-area-inset-bottom));
+  left:50%;
   transform:translateX(-50%) translateY(80px);
-  background:#1e293b; color:#fff; border-radius:10px;
-  padding:12px 20px; font-size:13px;
-  opacity:0; transition:all 0.3s; z-index:999;
-  white-space:nowrap; pointer-events:none;
+  background:#1e293b;
+  color:#fff;
+  border-radius:10px;
+  padding:12px 20px;
+  font-size:var(--fs-sm);
+  opacity:0;
+  transition:all 0.3s;
+  z-index:999;
+  white-space:nowrap;
+  pointer-events:none;
+  max-width:calc(100vw - 32px);
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 .toast.show    { opacity:1; transform:translateX(-50%) translateY(0); }
 .toast.success { background:var(--green); }
 .toast.error   { background:var(--err); }
+
+/* ============================================================
+   RESPONSIVE BREAKPOINTS
+   ============================================================ */
+
+/* จอเล็กมาก เช่น iPhone SE (320px) */
+@media (max-width: 360px) {
+  body { padding:12px 8px 60px; }
+  .header { padding:18px 14px 14px; }
+  .form-sec { padding:14px; gap:10px; }
+  .terms-sec { padding:14px; }
+  .cb-row { padding:12px 14px; }
+  .btn-sec { padding:10px 14px 14px; }
+  .bottom-note { padding:10px 14px; }
+  #qr-canvas,
+  #qr-canvas img,
+  #qr-canvas canvas { width:72px !important; height:72px !important; }
+  .qr-block { max-width:72px; }
+}
+
+/* จอกว้างปานกลาง เช่น tablet */
+@media (min-width: 600px) {
+  body { padding:32px 24px 80px; }
+  .wrap { max-width:560px; }
+  .form-sec { padding:24px; }
+  .terms-sec { padding:22px 24px; }
+}
+
+/* iPad และใหญ่กว่า */
+@media (min-width: 768px) {
+  .wrap { max-width:580px; }
+}
+
+/* Landscape มือถือ — ลด padding แนวตั้ง */
+@media (max-height: 500px) and (orientation: landscape) {
+  body { padding:10px 16px 40px; }
+  .header { padding:14px 18px 10px; }
+  .terms-scroll { max-height:160px; }
+}
 </style>
 </head>
 <body>
@@ -160,8 +389,10 @@ body {
     <div class="field-group">
       <label>ชื่อ-นามสกุล *</label>
       <input type="text" id="inp-name"
-             placeholder="กรอก ชื่อ-นามสกุล"
-             oninput="validate()" autocomplete="name">
+             placeholder="กรอกชื่อ-นามสกุล"
+             oninput="validate()"
+             autocomplete="name"
+             enterkeyhint="next">
       <span class="errmsg">กรุณากรอกชื่อ-นามสกุล (อย่างน้อย 3 ตัวอักษร)</span>
     </div>
 
@@ -170,7 +401,10 @@ body {
       <input type="text" id="inp-code"
              placeholder="เช่น KPS-001234"
              oninput="fmtCode(this); validate()"
-             maxlength="11" autocomplete="off" inputmode="numeric">
+             maxlength="11"
+             autocomplete="off"
+             inputmode="numeric"
+             enterkeyhint="next">
       <span class="hint">พิมพ์ตัวเลข 6 หลัก ระบบใส่ KPS- ให้อัตโนมัติ</span>
       <span class="errmsg">รูปแบบรหัสไม่ถูกต้อง เช่น KPS-001234</span>
     </div>
@@ -179,7 +413,9 @@ body {
       <label>ยอดขายครั้งแรก (บาท) *</label>
       <input type="text" id="inp-amount"
              placeholder="เช่น 23,000"
-             oninput="fmtAmount(this); validate()" inputmode="numeric">
+             oninput="fmtAmount(this); validate()"
+             inputmode="numeric"
+             enterkeyhint="done">
       <span class="errmsg">กรุณากรอกยอดขายที่ถูกต้อง</span>
     </div>
 
@@ -194,7 +430,7 @@ body {
 
 <!-- NOTE -->
 <div class="note-yellow">
-  <p><strong>หมายเหตุ</strong> : กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง ระบบจะบันทึกข้อมูลทันทีที่กดยืนยัน เพื่อใช้ในการตรวจสอบก่อนเข้าสู่ถัดไป</p>
+  <p><strong>หมายเหตุ</strong> : กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง ระบบจะบันทึกข้อมูลทันทีที่กดรับทราบ เพื่อใช้ในการตรวจสอบก่อนเข้าสู่ถัดไป</p>
 </div>
 
 <!-- TERMS -->
@@ -231,13 +467,13 @@ body {
 <!-- BUTTON -->
 <div class="sec sep btn-sec">
   <button class="btn-confirm" id="confirmBtn" type="button" onclick="submitData()">
-    ยืนยันและดำเนินการต่อ
+    รับทราบและพร้อมยืนยันรับยอดขาย
   </button>
 </div>
 
 <!-- BOTTOM NOTE -->
 <div class="sec sec-last bottom-note">
-  <p>ข้อมูลที่กรอกจะถูกบันทึกลงระบบ Escrow เพื่อใช้ในการตรวจสอบและยืนยันเครดิตบัญชี<br>
+  <p>ข้อมูลที่กรอกจะถูกบันทึกลงระบบ Escrow เพื่อใช้ในการตรวจสอบและยืนยัน<br>
   ระบบ Escrow K2PS คุ้มครองทั้งผู้ซื้อและผู้ขายทุกรายการ</p>
 </div>
 
@@ -246,16 +482,15 @@ body {
 
 <script>
 // ================================================================
-// CONFIG — ใส่ URL Apps Script ครั้งเดียว ใช้งานได้เลย
+// CONFIG
 // ================================================================
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyH5i1voAtnPXun6ph2WS_bI8s_SHXDZWVd1im91l8JlxM8TF7WGdV1O4Z06eRbjm7S/exec';
 const LINE_URL  = 'https://line.me/ti/p/Rpvv6sGPQY';
 
-// ป้องกัน double submit
 let isSubmitting = false;
 
 // ================================================================
-// Validation — คืนค่า true เมื่อทุก field ผ่าน
+// Validation
 // ================================================================
 function validate() {
   const name   = document.getElementById('inp-name').value.trim();
@@ -267,7 +502,6 @@ function validate() {
   const codeOk   = /^KPS-\d{6}$/.test(code);
   const amountOk = /^\d+$/.test(amount) && parseInt(amount) > 0;
 
-  // แสดง error เฉพาะช่องที่เริ่มพิมพ์แล้ว
   setFieldState('inp-name',   nameOk,   name.length > 0);
   setFieldState('inp-code',   codeOk,   code.length > 0);
   setFieldState('inp-amount', amountOk, amount.length > 0);
@@ -284,7 +518,7 @@ function setFieldState(id, isOk, hasInput) {
 }
 
 // ================================================================
-// Format รหัสผู้ขาย: พิมพ์ตัวเลข → KPS-XXXXXX (6 หลัก)
+// Format รหัสผู้ขาย → KPS-XXXXXX (6 หลัก)
 // ================================================================
 function fmtCode(el) {
   const digits = el.value.replace(/[^0-9]/g, '').slice(0, 6);
@@ -292,7 +526,7 @@ function fmtCode(el) {
 }
 
 // ================================================================
-// Format ยอดเงิน: → 23,000
+// Format ยอดขาย → 23,000
 // ================================================================
 function fmtAmount(el) {
   const raw = el.value.replace(/[^0-9]/g, '');
@@ -300,7 +534,7 @@ function fmtAmount(el) {
 }
 
 // ================================================================
-// Submit: บันทึก Sheet → redirect LINE
+// Submit → Sheet → LINE
 // ================================================================
 function submitData() {
   if (!validate() || isSubmitting) return;
@@ -316,7 +550,7 @@ function submitData() {
     code:      document.getElementById('inp-code').value.trim(),
     amount:    document.getElementById('inp-amount').value.trim(),
     timestamp: new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' }),
-    status:    'ยืนยันแล้ว'
+    status:    'รับทราบแล้ว'
   };
 
   fetch(SHEET_URL, {
@@ -330,14 +564,14 @@ function submitData() {
 }
 
 // ================================================================
-// Generate QR จาก SHEET_URL
+// Generate QR
 // ================================================================
 window.addEventListener('load', function () {
   if (typeof QRCode !== 'undefined') {
     new QRCode(document.getElementById('qr-canvas'), {
       text:         SHEET_URL,
-      width:        88,
-      height:       88,
+      width:        82,
+      height:       82,
       colorDark:    '#1a3a6b',
       colorLight:   '#ffffff',
       correctLevel: QRCode.CorrectLevel.M
